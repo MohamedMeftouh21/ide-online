@@ -1,0 +1,115 @@
+
+{%  extends 'accounts/main.html' %}
+{% block content %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Result</title>
+    <style type="text/css">
+        body {
+            background:whitesmoke;
+        }
+        div.testcase-status {
+            padding:2px;
+            padding-left:20px;
+            font-family: "DejaVu Sans",Constantia,sans-serif;
+            margin-left:1%;
+            border:1px inset;
+            margin-top:1%;
+        }
+        .testcase-status h2 {
+            font-size:17px;
+        }
+        pre {
+            margin-left: 3%;
+        }
+        .status-text-success {
+            text-decoration: underline;
+            text-transform: uppercase;
+            font-size:15px;
+            color:green;
+        }
+        .status-text-fail
+        {
+            text-decoration: underline;
+            text-transform: uppercase;
+            font-size:15px;
+            color:red;
+        }
+        .success-bg {
+            background:rgba(0,255,0,0.1);
+        }
+        .fail-bg {
+            background: rgba(255,0,0,0.1);
+        }
+        .rightPane {
+            padding:1%;
+            margin-left: 3%;
+            border-left:2px solid black;
+        }
+        div#status_header {
+            padding:1%;
+            font-family:inherit;
+            background:rgba(255,255,0,0.3);
+        }
+        #status_header table {
+            width:50%;
+            margin-left:20%;
+            border-collapse: collapse;
+        }
+        #status_header table,#status_header td,#status_header th {
+            text-align:center;
+            border:2px solid black;
+        }
+        #status_header th,#status_header td {
+            padding: 1%;
+        }
+        #status_header th {
+            background:rgba(255,99,71,0.7);
+        }
+    </style>
+</head>
+<body>
+    <div id="status_header">
+        <table>
+            <tr>
+                <th rowspan="2"> Status </th>
+                <th colspan="2"> Test Cases </th>
+            </tr>
+            <tr>
+                <th> Total </th>
+                <th> Passed </th>
+            </tr>
+            <tr>
+                <td> {{ result }}</td>
+                <td> {{ test_cases_total }}</td>
+                <td> {{ test_cases_passed }}</td>
+            </tr>
+        </table>
+    </div>
+    {% for i,status,output,error in display_data %}
+            {% if status == True %}
+                <div class="testcase-status success-bg">
+                <div class="leftPane">
+                    <h3> Testcase {{ i }} <span class="status-text-success">success</span> </h3>
+                </div>
+            {% else %}
+                <div class="testcase-status fail-bg">
+                <div class="leftPane">
+                    <h3> Testcase {{ i }} <span class="status-text-fail">fail</span> </h3>
+                </div>
+            {% endif %}
+
+            <div class="rightPane">
+                <h2> Output: </h2>
+                <p><pre>{{ output | safe }}</pre>
+                <h2> Errors: </h2>
+                <p><pre>{{ error | safe }}</pre>
+            </div>
+        </div>
+    {% endfor %}
+</body>
+</html>{% endblock %}

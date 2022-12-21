@@ -1,0 +1,109 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+	<link rel="stylesheet" type="text/css" href="{% static '/css/main.css' %}">
+    <title> CODE </title>
+
+</head>
+<body>
+	{%  include 'accounts/navbar.html' %}
+	<div class="container-fluid">
+	{% block content %}
+
+	<div class="row">
+		<div class="col">
+			<div class="card card-body">
+				<h5>Ajouter Project</h5>
+<br>
+<br>
+
+				<form method='POST' action="" enctype="multipart/form-data">
+					{% csrf_token %}
+					{{form.as_p}}
+					<input type="submit" name="Submit">
+
+				</form>
+			
+			</div>
+		</div>
+	</div>
+
+	</div>
+	<div class="col-md-7">
+		<hr>
+		<div class="card card-body">
+			<a class="btn btn-primary  btn-sm btn-block" href="">Liste des Projects:</a>
+
+			<table class="table table-sm">
+				<tr>
+					<th>Project Name</th>
+					<th>Project </th>
+					<th> Ajouter la collaboration </th>
+					<th> Supprimer projet </th>
+
+
+
+					
+				</tr>
+
+				{% for customer in project_name %}
+					<tr>
+						<td>{{customer.name}}</td>
+						<td><a  href="{% url 'test' customer.id %}">{{customer.name}}</a></td>
+						<td><a  href="{% url 'Collaboratio_projet' customer.id %}">Ajouter  </a></td>
+						<td><a  href="{% url 'delete_project' customer.id %}">Supprimer</a></td>
+						
+
+
+
+					</tr>
+				{% endfor %}
+
+		
+			</table>
+		</div>
+	</div>
+	<br>
+	<br>
+	<br>
+
+	<div class="col-md-5">
+		<hr>
+		<div class="card card-body">
+			<a class="btn btn-primary  btn-sm btn-block" href="">Liste de Collaboration:</a>
+			<table class="table table-sm">
+				<tr>
+					<th>Project Name</th>
+					<th>Project </th>
+
+					<th>Supprimer </th>
+
+				</tr>
+
+				{% for i in liste_Collaboration %}
+				<tr>
+					<td>{{i.project}}</td>
+					<td><a class="btn btn-sm btn-info" href="{% url 'test' i.project.id %}">{{i.project}}</a></td>
+
+					<td><a class="btn btn-sm btn-info" href="{% url 'delete_Collaboration' i.project.id %}">Supprimer</a></td>
+
+					</tr>
+				{% endfor %}
+
+			</table>
+		</div>
+	</div>
+	{% endblock %}
+    </div>
+	<hr>
+	
+</body>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</html>

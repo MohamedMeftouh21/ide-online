@@ -1,0 +1,116 @@
+
+{%  extends 'accounts/main.html' %}
+{% block content %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta charset='utf-8'>
+	<meta http-equiv='X-UA-Compatible' content='IE=edge'>
+	
+    <meta charset="utf-8"/>
+    <link rel=stylesheet href=" {% static './doc/docs.css' %}">
+    
+    <link rel="stylesheet" href=" {% static './lib/codemirror.css' %}">
+    <script src=" {% static './lib/codemirror.js' %}"></script>
+    <script src=" {% static './addon/edit/matchbrackets.js' %}"></script>
+    
+    
+    <script src=" {% static './addon/hint/python-hint.js' %}"></script>
+    <script src=" {% static './addon/hint/simple-hint.js' %}"></script>
+    <link rel="stylesheet" href=" {% static './addon/hint/simple-hint.css' %}">
+    <script src=" {% static './mode/python/python.js' %}"></script>
+    <style>.CodeMirror {border-top: 1px solid black; border-bottom: 1px solid black;}</style>
+    <title>code</title>
+    <style type="text/css">
+        body {
+            font-family:"Lucida Sans",Constantia,sans-serif;
+        }
+    </style>
+</head>
+<body>
+
+        <form action="compiler" method="POST"> {% csrf_token %}
+
+              {{ form.name }}
+
+                    <td>{{ form.language.label }}
+                    <td>{{ form.language }}
+                    <td class="errors">{{ form.language.errors }}</td>
+                <tr>
+                    <td>{{ form.template.label }}</td>
+                    <td>{{ form.template }}</td>
+
+                    <textarea id="code" name="code">
+
+                        {{ form.code }}				</textarea>
+   
+
+                </tr>
+                <input type="submit" value="Run - Save" class="btn btn-success btn-lg">
+
+                    <td colspan="2" class="errors">{{ form.template.errors }}</td>
+                    <td colspan="2" class="errors">{{ form.code.errors }}</td>
+                 
+             
+                 
+                    <div class="input-group">
+                        <textarea class="form-control custom-control" id="input" name="input" rows="8" > 
+                            {{ form.input.errors }}
+
+                            {{ form.input }}
+                        </textarea>
+                        <textarea class="form-control custom-control"  id="output" name="output"  rows="8" >
+
+                            {{ form.output }}
+                            {{ form.output.errors }}
+                        </textarea>
+
+                    </div>
+                
+
+
+        </form>
+    
+    </div>
+ 
+
+
+<script  >
+
+
+const output = document.getElementById("output");
+const input = document.getElementById("input");
+const editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+        mode: {name: "python",
+               version: 3,
+               singleLineStringErrors: false},
+        lineNumbers: true,
+		extraKeys: {"Ctrl-Space": "autocomplete"},
+        closeTags: true,
+
+
+        
+    });
+	 CodeMirror.commands.autocomplete = function(cm) {
+										 CodeMirror.simpleHint(cm, CodeMirror.pythonHint);
+										 }
+editor.setValue('{{project_1.code  }}');
+output.value = "Initializing...\n";
+input.value = " #input ";
+
+
+
+
+
+
+
+
+
+</script>
+</body>
+
+</html>
+{% endblock %}

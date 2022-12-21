@@ -1,0 +1,132 @@
+{%  extends 'accounts/main.html' %}
+{% block content %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <style>.CodeMirror {border-top: 1px solid black; border-bottom: 1px solid black;}</style>
+    <title>code</title>  <!-- CodeMirror -->
+   <!-- CodeMirror Style -->
+    <link rel="stylesheet" href="{% static './lib/codemirror.css' %}">
+    <link rel=stylesheet href="{% static './doc/docs.css' %}">
+    <link rel="stylesheet" href="{% static './addon/hint/simple-hint.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.16.0/theme/monokai.min.css" integrity="sha512-xTAcmDh9LVfdwYnQWuOwTc/pjzAOp5ErJU4VXB8uV7SJblCftdXHFY7q1yhZudlxsPg0VcNJlgE5cVAHxdGYdg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="{% static './addon/lint/lint.css' %}">
+   <!-- CodeMirror Script -->
+    <script src="{% static './lib/codemirror.js' %}"></script>
+    <script src="{% static './addon/edit/matchbrackets.js' %}"></script>
+    <script src="{% static './addon/hint/python-hint.js' %}"></script>
+    <script src="{% static './addon/hint/simple-hint.js' %}"></script>
+    <script src="{% static './mode/python/python.js' %}"></script>
+    <style type="text/css">
+        body {
+            font-family:"Lucida Sans",Constantia,sans-serif;
+        }
+    </style>
+  
+   <!-- Script -->
+  </head>
+
+  <body class="bg-dark" style="font-family:Verdana">
+   
+
+    <form action="compiler" method="POST"> {% csrf_token %}
+
+        {{ form.name }}
+
+              <td>{{ form.language.label }}
+              <td>{{ form.language }}
+              <td class="errors">{{ form.language.errors }}</td>
+          <tr>
+              <td>{{ form.template.label }}</td>
+              <td>{{ form.template }}</td>
+
+              <textarea id="code" name="code" value=" 	">
+                {{ form.code }}
+            				</textarea>
+
+
+          </tr>
+          <input type="submit" value="Run - Save" class="btn btn-success btn-lg">
+
+              <td colspan="2" class="errors">{{ form.template.errors }}</td>
+              <td colspan="2" class="errors">{{ form.code.errors }}</td>
+           
+       
+           
+              <div class="input-group">
+                  <textarea class="form-control custom-control" id="input" name="input" rows="8" > 
+                      {{ form.input.errors }}
+
+                      {{ form.input }}
+                  </textarea>
+                  <textarea class="form-control custom-control"  id="output" name="output"  rows="8" >
+
+                      {{ form.output }}
+                      {{ form.output.errors }}
+                  </textarea>
+
+              </div>
+          
+
+
+  </form>
+</div>
+
+<script  >
+
+
+    const output = document.getElementById("output");
+    const data= `{{project_1.code  }}`
+    var input = document.getElementById("input");
+    var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+            mode: {name: "python",
+                   version: 3,
+                   singleLineStringErrors: false},
+            lineNumbers: true,
+        indentUnit: 4,
+        matchBrackets: true,
+        styleActiveLine: true,
+        highlightSelectionMatches: true,
+        autoCloseTags: true,
+        lineWrapping: true,
+        extraKeys: {
+          "Ctrl-i": "autocomplete",
+        },
+        foldGutter: true,
+        gutters: ['CodeMirror-lint-markers'],
+        lintWith: {
+          "getAnnotations": CodeMirror.remoteValidator,
+          "async": true,
+        },
+
+    
+    });
+        CodeMirror.commands.autocomplete = function(cm) {
+          CodeMirror.simpleHint(cm, CodeMirror.pythonHint);
+          }
+        editor.on('keyup', function(editor, event){
+          // type code and show autocomplete hint in the meanwhile
+          CodeMirror.commands.autocomplete(editor);
+         
+      });
+      editor.setValue(`{{project_1.code |safe}} `);
+
+    output.value = "Initializing...\n";
+    input.value = " #input ";
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    </script>
+    
+  </body>
+</html>{% endblock %}
